@@ -1,0 +1,107 @@
+﻿@model IEnumerable<ECommerce.Models.Category>
+<h1> This is Category Index</h1>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-hover">
+                   <thead>
+                       <th>Name</th>
+                       <th>Unit</th>
+                       <th>Action</th>
+                   </thead>
+                   <tbody>
+                        @foreach(Category x in Model)
+                        {
+                            <tr>
+                                <td>@x.CategoryName</td>
+                                <td>@x.CategoryUnit</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-sm">Edit</button>
+                                    <button type="button" data-key="@x.Id" class="btn btn-danger btn-sm btnDelete">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+               <div class="row">
+                   <div class="col-md-3">
+                       Name
+                   </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control formName"/>
+                    </div>
+               </div>
+                <div class="row col mt-2">
+                    <div class="col-md-3">
+                        Code
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control formUnit"/>
+                    </div>
+                </div>
+                <div class="row col mt-2">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-6">
+                       <button type="button" class="btn btn-success btn-sm btnSave">Save</button>
+                        <button type="button" class="btn btn-danger btn-sm btnCancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).on('click','.btnSave',function(){
+            var name = $('.formName').val();
+            var code = $('.formUnit').val();
+            if (name == '') {
+                alert("Please enter name");
+            } else if (code == '') {
+                alert("Please enter unit");
+            } else {
+                $.ajax({
+                    method:'get',
+                    url:'@Url.Action("Save", "Category")?categoryName=' + name + '&categoryCode=' + code,
+                    contentType: "application/json;charset=utf-8",
+                    success: function (res) {
+                        alert(res.message);
+                    }
+                })
+            }
+        })
+        $(document).on('click', '.btnCancel', function () {
+            var ok = confirm("Are you sure you want to cancel?");
+            if (ok) {
+                $('.formName').val('');
+                $('.formUnit').val('');
+            }
+        })
+        $(document).on('click', '.btnDelete', function () {
+            var id = $(this).data('key');
+            var ok = confirm("Are you sure you want to delete this record?");
+            if(ok){
+                $.ajax({
+                    method: 'get',
+                    url: '@Url.Action("Delete", "Category")?id=' + id,
+                    contentType: "application/json;charset=utf-8",
+                    success: function (res) {
+                        alert(res.message);
+                    }
+                })
+            }
+        })
+        function clearForm() {
+            $('.formName').val('');
+            $('.formUnit').val('');
+        }
+    </script>
+}

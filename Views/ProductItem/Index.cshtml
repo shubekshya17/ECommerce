@@ -1,0 +1,174 @@
+﻿@model IEnumerable<ECommerce.Models.ProductItem>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                        <th>Product Name</th>
+                        <th>Product Code</th>
+                        <th>Category Id</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(ProductItem x in Model)
+                        {
+                            <tr>
+                                <td>@x.ProductName</td>
+                                <td>@x.ProductCode</td>
+                                <td>@x.CategoryId</td>
+                                <td>@x.Description</td>
+                                <td>
+                                    <button data-key="@x.ProductItemId" class="btn btn-primary btn-sm btnEdit">Edit</button>
+                                    <button data-key="@x.ProductItemId" class="btn btn-danger btn-sm btnDelete">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        Product Name
+                    </div>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control txtProductName"/>
+                    </div>
+                </div>
+                <div class="row col mt-2">
+                    <div class="col-md-5">
+                        Product Code
+                    </div>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control txtProductCode" />
+                    </div>
+                </div>
+                <div class="row col mt-2">
+                    <div class="col-md-5">
+                        Category Id
+                    </div>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control txtCategoryId" />
+                    </div>
+                </div>
+                <div class="row col mt-2">
+                    <div class="col-md-5">
+                        Description
+                    </div>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control txtDescription" />
+                    </div>
+                </div>
+                <div class="row col mt-2">
+                    <div class="col-md-5">
+                        Unit Price
+                    </div>
+                    <div class="col-md-7">
+                        <input type="number" class="form-control txtUnitPrice" />
+                    </div>
+                </div>
+                <div class="row col mt-2">
+                    <div class="col-md-5">
+                        Thumbnail
+                    </div>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control txtThumbnail" />
+                    </div>
+                </div>
+                <div class="row col mt-2">
+                    <div class="col-md-5">
+                    </div>
+                    <div class="col-md-7">
+                        <button type="button" class="btn btn-success btn-sm btnSave">Save</button>
+                        <button type="button" class="btn btn-danger btn-sm btnReset">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).on('click', '.btnSave', function () {
+            var name = $('.txtProductName').val();
+            var code = $('.txtProductCode').val();
+            var categoryId = $('.txtCategoryId').val();
+            var description = $('.txtDescription').val();
+            var unitPrice = $('.txtUnitPrice').val();
+            var thumbnail = $('.txtThumbnail').val();
+            if (name == '') {
+                alert("Please Enter Product Name");
+            }
+            else if (code == '') {
+                alert("Please Enter Product Code");
+            }
+            else if (categoryId == '') {
+                alert("Please Enter Category Id");
+            }
+            else if (description == '') {
+                alert("Please Enter Description");
+            }
+            else if (unitPrice == '') {
+                alert("Please Enter Unit Price");
+            }
+            else if (thumbnail == '') {
+                alert("Please Enter Thumbnail");
+            }
+            else {
+                $.ajax({
+                    method:'get',
+                    url:'@Url.Action("Save","ProductItem")?name=' + name + '&code=' + code + '&categoryId=' + categoryId + '&description=' + description + '&unitPrice=' + unitPrice + '&thumbnail=' + thumbnail,
+                    contentType: "application/json;charset=utf-8",
+                    success: function (res) {
+                        alert(res.message);
+                        clearForm();
+                    }
+                })
+            }
+        })
+
+        $(document).on('click', '.btnReset', function () {
+            var ok = confirm("Are you sure want to reset this form?");
+            if (ok) {
+                $('.txtProductName').val('');
+                $('.txtProductCode').val('');
+                $('.txtCategoryId').val('');
+                $('.txtDescription').val('');
+                $('.txtUnitPrice').val('');
+                $('.txtThumbnail').val('');
+            }
+        })
+
+        function clearForm() {
+            $('.txtProductName').val('');
+            $('.txtProductCode').val('');
+            $('.txtCategoryId').val('');
+            $('.txtDescription').val('');
+            $('.txtUnitPrice').val('');
+            $('.txtThumbnail').val('');
+        }
+
+        $(document).on('click', '.btnDelete', function () {
+            var id = $(this).data('key');
+            var ok = confirm("Are you sure you want to delete this record?")
+            if (ok) {
+                $.ajax({
+                    method:'get',
+                    url:'@Url.Action("Delete","ProductItem")?id=' + id,
+                    contentType: "application/json;charset=utf-8",
+                    success: function (res) {
+                        alert(res.message);
+                    }
+                })
+            }
+        })
+    </script>
+}
