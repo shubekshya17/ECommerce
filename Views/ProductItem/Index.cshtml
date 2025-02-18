@@ -87,6 +87,7 @@
                     <div class="col-md-5">
                     </div>
                     <div class="col-md-7">
+                        <input type="hidden" class="hdnId"/>
                         <button type="button" class="btn btn-success btn-sm btnSave">Save</button>
                         <button type="button" class="btn btn-danger btn-sm btnReset">Reset</button>
                     </div>
@@ -102,6 +103,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).on('click', '.btnSave', function () {
+            var id = $('.hdnId').val() || 0;
             var name = $('.txtProductName').val();
             var code = $('.txtProductCode').val();
             var categoryId = $('.txtCategoryId').val();
@@ -129,7 +131,7 @@
             else {
                 $.ajax({
                     method:'get',
-                    url:'@Url.Action("Save","ProductItem")?name=' + name + '&code=' + code + '&categoryId=' + categoryId + '&description=' + description + '&unitPrice=' + unitPrice + '&thumbnail=' + thumbnail,
+                    url:'@Url.Action("Save","ProductItem")?name=' + name + '&code=' + code + '&categoryId=' + categoryId + '&description=' + description + '&unitPrice=' + unitPrice + '&thumbnail=' + thumbnail + '&id=' + id,
                     contentType: "application/json;charset=utf-8",
                     success: function (res) {
                         toastr.success(res.message);
@@ -190,6 +192,26 @@
                     })
                 }
             });
+        })
+
+        $(document).on('click', '.btnEdit', function () {
+            var id = $(this).data('key');
+            $.ajax({
+                method: 'get',
+                url: '@Url.Action("Edit", "ProductItem")?id=' + id,
+                contentType: "application/json;charset=utf-8",
+                success: function (res) {
+                    if(res.success){
+                        $('.hdnId').val(res.data.productItemId);
+                        $('.txtProductName').val(res.data.productName);
+                        $('.txtProductCode').val(res.data.productCode);
+                        $('.txtCategoryId').val(res.data.categoryId);
+                        $('.txtDescription').val(res.data.description);
+                        $('.txtUnitPrice').val(res.data.unitPrice);
+                        $('.txtThumbnail').val(res.data.thumbnail);
+                    }
+                }
+            })
         })
     </script>
 }

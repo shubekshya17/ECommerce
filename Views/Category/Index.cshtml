@@ -17,7 +17,7 @@
                                 <td>@x.CategoryName</td>
                                 <td>@x.CategoryUnit</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-sm">Edit</button>
+                                    <button type="button" data-key="@x.Id" class="btn btn-primary btn-sm btnEdit">Edit</button>
                                     <button type="button" data-key="@x.Id" class="btn btn-danger btn-sm btnDelete">Delete</button>
                                 </td>
                             </tr>
@@ -50,6 +50,7 @@
                     <div class="col-md-3">
                     </div>
                     <div class="col-md-6">
+                        <input type="hidden" class="hdnId"/>
                        <button type="button" class="btn btn-success btn-sm btnSave">Save</button>
                         <button type="button" class="btn btn-danger btn-sm btnCancel">Cancel</button>
                     </div>
@@ -68,6 +69,7 @@
             toastr.success("Welcome");
         })
         $(document).on('click','.btnSave',function(){
+            var hdnId = $('.hdnId').val() || 0;
             var name = $('.formName').val();
             var code = $('.formUnit').val();
             if (name == '') {
@@ -77,7 +79,7 @@
             } else {
                 $.ajax({
                     method:'get',
-                    url:'@Url.Action("Save", "Category")?categoryName=' + name + '&categoryCode=' + code,
+                    url:'@Url.Action("Save", "Category")?categoryName=' + name + '&categoryCode=' + code + '&id=' + hdnId,
                     contentType: "application/json;charset=utf-8",
                     success: function (res) {
                         toastr.success(res.message);
@@ -128,5 +130,22 @@
             $('.formName').val('');
             $('.formUnit').val('');
         }
+
+        $(document).on('click','.btnEdit',function(){
+            var id = $(this).data('key');
+            debugger;
+            $.ajax({
+                method:'get',
+                url: '@Url.Action("Edit", "Category")?id=' + id,
+                contentType: "application/json;charset=utf-8",
+                success: function (res) {
+                    if (res.success) {
+                        $('.formName').val(res.data.categoryName);
+                        $('.formUnit').val(res.data.categoryUnit);
+                        $('.hdnId').val(res.data.id);
+                    }
+                }
+            })
+        })
     </script>
 }
