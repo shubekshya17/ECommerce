@@ -1,8 +1,91 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model ECommerce.Models.ViewModels.DashboardVM
+<div class="row">
+    <div class="col-md-3">
+        <div style="max-height: 308px; overflow-y: auto; border: 0.5px solid #ddd; border-radius:0.5rem">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Product Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var x in Model.CategoryInfo)
+                    {
+                        <tr>
+                            <td>
+                                <a href="/Category/Category?id=@x.Id&categoryName=@x.CategoryName">
+                                    @x.CategoryName
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://img.freepik.com/premium-vector/modern-trendy-black-friday-super-sale-facebook-cover-editable-web-banner-template_615614-684.jpg?w=826" class="d-block w-100" alt="..." style="width: 831px; height: 308px">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://img.freepik.com/premium-vector/modern-trendy-black-friday-super-sale-facebook-cover-editable-web-banner-template_615614-693.jpg?w=826" class="d-block w-100" alt="..." style="width: 831px; height: 308px">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://img.freepik.com/free-psd/black-friday-big-sale-social-media-post-design-template_47987-25239.jpg?t=st=1740041570~exp=1740045170~hmac=829f0cf1785d4a7ced1957563062eaeed1dcb3e72d8b4e9057135873450572cb&w=826" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div>
+@foreach (var category in Model.CategoryInfo)
+{
+    <div class="row mt-2">
+        <h4>@category.CategoryName</h4>
+        @foreach (var product in Model.ProductItemInfo.Where(x => x.CategoryId == category.Id).ToList())
+        {
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/16-9640/media-gallery/silver/touch/notebook-laptop-xps-16-9640-t-silver-gallery-4.psd?fmt=png-alpha&pscan=auto&scl=1&hei=804&wid=1324&qlt=100,1&resMode=sharp2&size=1324,804&chrss=full" style="width: 200px; height: 150px" ; />
+                        <label>@product.ProductName</label>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-secondary btn-sm btnCart" data-key="@product.ProductItemId" data-name="@product.ProductName" data-price="@product.UnitPrice"><i class="fa fa-shopping-cart"></i>Cart</button>
+                        <button class="btn btn-success btn-sm" style="float:right;"><i class="fa fa-eye"></i>View</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section scripts{
+    <script>
+    $(document).on('click','.btnCart',function(){
+        var obj = {
+            Id:$(this).data('key'),
+            ProductName:$(this).data('name'),
+        }
+        var id = $(this).data('key');
+        localStorage.setItem("ProductId", id);
+        alert("Product Added In Key");
+    })
+
+    </script>
+}
+

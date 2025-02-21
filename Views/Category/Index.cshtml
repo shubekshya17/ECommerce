@@ -1,27 +1,15 @@
 ﻿@model IEnumerable<ECommerce.Models.Category>
-<h1> This is Category Index</h1>
 <div class="row">
     <div class="col-md-8">
         <div class="card">
             <div class="card-body">
                 <table class="table table-hover">
-                   <thead>
-                       <th>Name</th>
-                       <th>Unit</th>
-                       <th>Action</th>
-                   </thead>
-                   <tbody>
-                        @foreach(Category x in Model)
-                        {
-                            <tr>
-                                <td>@x.CategoryName</td>
-                                <td>@x.CategoryUnit</td>
-                                <td>
-                                    <button type="button" data-key="@x.Id" class="btn btn-primary btn-sm btnEdit">Edit</button>
-                                    <button type="button" data-key="@x.Id" class="btn btn-danger btn-sm btnDelete">Delete</button>
-                                </td>
-                            </tr>
-                        }
+                    <thead>
+                    <th>Name</th>
+                    <th>Unit</th>
+                    <th>Action</th>
+                    </thead>
+                    <tbody id="listData">
                     </tbody>
                 </table>
             </div>
@@ -30,28 +18,28 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-body">
-               <div class="row">
-                   <div class="col-md-3">
-                       Name
-                   </div>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control formName"/>
+                <div class="row">
+                    <div class="col-md-3">
+                        Name
                     </div>
-               </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control formName" />
+                    </div>
+                </div>
                 <div class="row col mt-2">
                     <div class="col-md-3">
                         Code
                     </div>
                     <div class="col-md-9">
-                        <input type="text" class="form-control formUnit"/>
+                        <input type="text" class="form-control formUnit" />
                     </div>
                 </div>
                 <div class="row col mt-2">
                     <div class="col-md-3">
                     </div>
                     <div class="col-md-6">
-                        <input type="hidden" class="hdnId"/>
-                       <button type="button" class="btn btn-success btn-sm btnSave">Save</button>
+                        <input type="hidden" class="hdnId" />
+                        <button type="button" class="btn btn-success btn-sm btnSave">Save</button>
                         <button type="button" class="btn btn-danger btn-sm btnCancel">Cancel</button>
                     </div>
                 </div>
@@ -59,16 +47,39 @@
         </div>
     </div>
 </div>
-@section scripts{
+@section scripts {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
-            toastr.success("Welcome");
+            toastr.success("Welcome");  
+            loadData();
         })
-        $(document).on('click','.btnSave',function(){
+        function loadData() {
+            var html = '';
+            $.ajax({
+                method: 'get',
+                url: 'Category/GetAllData',
+                contentType: "application/json;charset=utf-8",
+                success: function (res) {
+                    $("#listData").find("tr").remove();
+                    $.each(res.data, function (key, item) {
+                        html += "<tr>" +
+                            "<td>" + item.categoryName + "</td>" +
+                            "<td>" + item.categoryUnit + "</td>" +
+                            "<td>" +
+                            "<button type='button' data-key='" + item.id + "' class='btn btn-primary btn-sm btnEdit'>Edit</button> " +
+                            "<button type='button' data-key='" + item.id + "' class='btn btn-danger btn-sm btnDelete'>Delete</button>" +
+                            "</td>" +
+                            "</tr>";
+                    })
+                    $("#listData").append(html)
+                }
+            })
+        }
+        $(document).on('click', '.btnSave', function () {
             var hdnId = $('.hdnId').val() || 0;
             var name = $('.formName').val();
             var code = $('.formUnit').val();
@@ -78,12 +89,13 @@
                 toastr.error("Please Enter Code");
             } else {
                 $.ajax({
-                    method:'get',
-                    url:'@Url.Action("Save", "Category")?categoryName=' + name + '&categoryCode=' + code + '&id=' + hdnId,
+                    method: 'get',
+                    url: '@Url.Action("Save", "Category")?categoryName=' + name + '&categoryCode=' + code + '&id=' + hdnId,
                     contentType: "application/json;charset=utf-8",
                     success: function (res) {
                         toastr.success(res.message);
                         clearForm();
+                        loadData();
                     }
                 })
             }
@@ -104,6 +116,7 @@
             });
         })
         $(document).on('click', '.btnDelete', function () {
+            debugger;
             var id = $(this).data('key');
             Swal.fire({
                 title: "Are you sure?",
@@ -121,6 +134,7 @@
                         contentType: "application/json;charset=utf-8",
                         success: function (res) {
                             toastr.success(res.message);
+                            loadData();
                         }
                     })
                 }
@@ -131,11 +145,10 @@
             $('.formUnit').val('');
         }
 
-        $(document).on('click','.btnEdit',function(){
+        $(document).on('click', '.btnEdit', function () {
             var id = $(this).data('key');
-            debugger;
             $.ajax({
-                method:'get',
+                method: 'get',
                 url: '@Url.Action("Edit", "Category")?id=' + id,
                 contentType: "application/json;charset=utf-8",
                 success: function (res) {

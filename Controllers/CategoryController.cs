@@ -1,5 +1,6 @@
 ﻿using ECommerce.DataAccess;
 using ECommerce.Models;
+using ECommerce.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Controllers
@@ -13,15 +14,16 @@ namespace ECommerce.Controllers
         }
         public IActionResult Index()
         {
-            /*Category c = new Category();
-            c.CategoryName = "Shoes";
-            c.CategoryUnit = "Unit";
-            c.CreatedDate = DateTime.Now;
-            _context.Add(c);
-            _context.SaveChanges();*/
-
-            var datas= _context.Category.ToList();
-            return View(datas);
+            return View();
+        }
+        public JsonResult GetAllData()
+        {
+            var data = _context.Category.ToList();
+            return Json(new
+            {
+                success = true,
+                data = data
+            });
         }
         public JsonResult Save(string categoryName,string categoryCode,int id)
         {
@@ -110,5 +112,13 @@ namespace ECommerce.Controllers
                 });
             }
         }
+
+        public IActionResult Category(string categoryName, int id)
+        {
+            ItemListVM itemListVM = new ItemListVM();
+            itemListVM.ProductItems = _context.ProductItems.Where(c => c.CategoryId == id).ToList();
+            return View(itemListVM);
+        }
+
     }
 }

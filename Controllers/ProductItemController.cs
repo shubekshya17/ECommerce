@@ -110,5 +110,10 @@ namespace ECommerce.Controllers
                 });
             }
         }
+
+        public IActionResult Cart()
+        {
+            return View();
+        }
     }
 }

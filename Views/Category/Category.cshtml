@@ -1,0 +1,29 @@
+﻿@model ECommerce.Models.ViewModels.ItemListVM
+@foreach (var x in Model.ProductItems)
+{
+    <h3>@x.ProductName</h3>
+    <div class="owl-carousel">
+        <div class="item">
+            <div class="card">
+                <div class="card-body" style="width:300px;height:150px;">
+                    Hello
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var owl = $(".owl-carousel");
+            owl.owlCarousel({
+                items: 4,
+                loop: true,
+                margin: 10,
+                autoplay: true,
+                autoplayTimeout: 1000,
+                autoplayHoverPause: true
+            });
+        });
+    </script>
+}

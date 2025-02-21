@@ -1,4 +1,6 @@
+using ECommerce.DataAccess;
 using ECommerce.Models;
+using ECommerce.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,15 +9,20 @@ namespace ECommerce.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            DashboardVM obj = new DashboardVM();
+            obj.CategoryInfo = _context.Category.ToList();
+            obj.ProductItemInfo = _context.ProductItems.ToList();
+            return View(obj);
         }
 
         public IActionResult Privacy()
