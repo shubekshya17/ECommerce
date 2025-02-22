@@ -115,5 +115,18 @@ namespace ECommerce.Controllers
         {
             return View();
         }
+
+        public IActionResult Detail(int id)
+        {
+            var data = _context.ProductItems.Where(x => x.ProductItemId == id).FirstOrDefault();
+            if(data == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+            return View(data);
+            }
+        }
     }
 }

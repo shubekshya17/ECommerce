@@ -66,7 +66,7 @@
                     </div>
                     <div class="card-footer">
                         <button class="btn btn-secondary btn-sm btnCart" data-key="@product.ProductItemId" data-name="@product.ProductName" data-price="@product.UnitPrice"><i class="fa fa-shopping-cart"></i>Cart</button>
-                        <button class="btn btn-success btn-sm" style="float:right;"><i class="fa fa-eye"></i>View</button>
+                        <button class="btn btn-success btn-sm btnView" data-key="@product.ProductItemId" style="float:right;"><i class="fa fa-eye"></i>View</button>
                     </div>
                 </div>
             </div>
@@ -75,16 +75,32 @@
 }
 
 @section scripts{
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
     $(document).on('click','.btnCart',function(){
         var obj = {
             Id:$(this).data('key'),
             ProductName:$(this).data('name'),
+            UnitPrice:$(this).data('price'),
+            Quantity:1,
+            Total: $(this).data('price')
         }
-        var id = $(this).data('key');
-        localStorage.setItem("ProductId", id);
-        alert("Product Added In Key");
+        var oldItems = JSON.parse(localStorage.getItem("Products") || '[]')
+        var filterItems = oldItems.filter(x => x.Id == obj.Id)
+        if (filterItems && filterItems.length>0) {
+            toastr.error("Item Already Added In the Cart");
+            return;
+        }
+        oldItems.push(obj);
+        localStorage.setItem("Products",JSON.stringify(oldItems));
+        toastr.success("Item Added In The Cart");
     })
+
+        $(document).on('click', '.btnView', function () {
+            var id = $(this).data('key');
+            window.location.href ='@Url.Action("Detail", "ProductItem")' + '?id=' + id;
+        });
 
     </script>
 }
