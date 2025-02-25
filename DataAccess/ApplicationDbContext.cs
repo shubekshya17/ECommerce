@@ -10,5 +10,7 @@ namespace ECommerce.DataAccess
         }
         public DbSet<Category> Category { get; set; }
         public DbSet<ProductItem> ProductItems { get; set; }
+        public DbSet<ProductOrderMaster> ProductOrderMaster { get; set; }
+        public DbSet<ProductOrderDetail> ProductOrderDetail { get; set; }
     }
 }

@@ -2,7 +2,8 @@
     <div class="col-md-9">
         <div class="card">
             <div class="card-body">
-                <button class="btn btn-danger btnRemoveProducts btn-sm">Remove</button>
+                <button class="btn btn-danger btnRemoveProducts btn-sm">Clear Cart</button>
+                <button class="btn btn-success btnCheckout btn-sm">Checkout</button>
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -21,6 +22,59 @@
         </div>
     </div>
 </div>
+<div class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Customer Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="card">
+                  <div class="card-body">
+                      <div class="row">
+                          <div class="col-md-4">
+                              <label>FullName</label>
+                          </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control txtFullName"/>
+                            </div>
+                      </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control txtEmail" />
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <label>MobileNo</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control txtMobileNo" />
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <label>Address</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control txtAddress" />
+                            </div>
+                        </div>
+                  </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary modalSave">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts {
     <script>
         $(document).ready(function () {

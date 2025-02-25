@@ -1,4 +1,5 @@
 ﻿$(document).on('click', '.btnCart', function () {
+    debugger
     var obj = {
         Id: $(this).data('key'),
         ProductName: $(this).data('name'),
@@ -85,4 +86,47 @@ $(document).on('change', '.txtQuantity', function () {
     selectedItem.Total = +newQuantity * +selectedItem.UnitPrice;
     localStorage.setItem("Products", JSON.stringify(oldProducts));
     loadItems();
+})
+
+$(document).on('click', '.btnCheckout', function () {
+    $(".modal").modal("show");
+})
+
+$(document).on('click', '.modalSave', function () {
+    debugger
+    var masterValue = {
+        FullName: $(".txtFullName").val() || '',
+        MobileNo: $(".txtMobileNo").val() || '',
+        Address: $(".txtAddress").val() || '',
+        Email: $(".txtEmail").val() || '',
+    }
+    if (masterValue.FullName == '') {
+        toastr.error("Enter FullName")
+    }
+    else if (masterValue.Email == '') {
+        toastr.error("Enter Email")
+    }
+    else if (masterValue.MobileNo == '') {
+        toastr.error("Enter MobileNo")
+    }
+    else if (masterValue.Address == '') {
+        toastr.error("Enter Address")
+    }
+    else {
+        var detailValue = localStorage.getItem("Products") || '[]';
+        var detailValue = JSON.parse(detailValue);
+        var payload = {
+            master : masterValue,
+            detail : detailValue
+        }
+        $.ajax({
+            method: 'post',
+            url: "/Order/Save",
+            data: JSON.stringify(payload),
+            contentType: "application/json;charset=utf-8",
+            success: function (res) {
+                debugger;
+            }
+        })
+    }
 })
