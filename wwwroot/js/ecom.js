@@ -1,14 +1,13 @@
 ﻿$(document).on('click', '.btnCart', function () {
-    debugger
     var obj = {
-        Id: $(this).data('key'),
+        ProductItemId: $(this).data('key'),
         ProductName: $(this).data('name'),
         UnitPrice: $(this).data('price'),
         Quantity: 1,
         Total: $(this).data('price')
     }
     var oldItems = JSON.parse(localStorage.getItem("Products") || '[]')
-    var filterItems = oldItems.filter(x => x.Id == obj.Id)
+    var filterItems = oldItems.filter(x => x.ProductItemId == obj.ProductItemId)
     if (filterItems && filterItems.length > 0) {
         toastr.error("Item Already Added In the Cart");
         return;
@@ -24,13 +23,13 @@ function loadItems() {
     $.each(products, function (key, item) {
         $("#listDatas").find("tr").remove();
         html += "<tr>" +
-            "<td>" + item.Id + "</td>" +
+            "<td>" + item.ProductItemId + "</td>" +
             "<td>" + item.ProductName + "</td>" +
             "<td>" + item.UnitPrice + "</td>" +
-            "<td>" + "<input type='number' class='form-control txtQuantity' data-key='" + item.Id + "' value='" + item.Quantity + "'/>" + "</td>" +
+            "<td>" + "<input type='number' class='form-control txtQuantity' data-key='" + item.ProductItemId + "' value='" + item.Quantity + "'/>" + "</td>" +
             "<td>" + item.Total + "</td>" +
             "<td>" +
-            "<button type='button' data-key='" + item.Id + "' class='btn btn-danger btn-sm btnDelete'>" +
+            "<button type='button' data-key='" + item.ProductItemId + "' class='btn btn-danger btn-sm btnDelete'>" +
             "<i class='fa fa-trash'></i> Delete" +
             "</button>" +
             "</td>" +
@@ -66,7 +65,7 @@ $(document).on('click', '.btnDelete', function () {
         if (result.isConfirmed) {
             var id = $(this).data('key');
             var oldProducts = JSON.parse(localStorage.getItem("Products") || '[]');
-            oldProducts = oldProducts.filter(x => x.Id != id)
+            oldProducts = oldProducts.filter(x => x.ProductItemId != id)
             localStorage.setItem("Products", JSON.stringify(oldProducts));
             loadItems();
         }
@@ -76,7 +75,7 @@ $(document).on('change', '.txtQuantity', function () {
     var id = $(this).data('key');
     var newQuantity = $(this).val();
     var oldProducts = JSON.parse(localStorage.getItem("Products") || '[]');
-    var s = oldProducts.filter(x => x.Id == id);
+    var s = oldProducts.filter(x => x.ProductItemId == id);
     if (s.length <= 0) {
         toastr.error("Item Not Found");
         return;
@@ -125,8 +124,24 @@ $(document).on('click', '.modalSave', function () {
             data: JSON.stringify(payload),
             contentType: "application/json;charset=utf-8",
             success: function (res) {
-                debugger;
+                if (res.success) {
+                    toastr.success(res.message);
+                }
+                else {
+                    toastr.error(res.message);
+                }
+                localStorage.removeItem("Products");
+                loadItems();
+                clearModalForm();
             }
         })
     }
 })
+
+function clearModalForm() {
+   $(".txtFullName").val('')
+   $(".txtMobileNo").val(''),
+   $(".txtAddress").val(''),
+   $(".txtEmail").val(''),
+   $(".modal").modal("hide")
+}
