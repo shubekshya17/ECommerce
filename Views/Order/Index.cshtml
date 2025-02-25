@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ECommerce.Models.ViewModels.OrderWithCountVM>
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>FullName</th>
+                            <th>MobileNo</th>
+                            <th>Address</th>
+                            <th>Total Items</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td>@x.ProductOrderMasterId</td>
+                                <td>@x.FullName</td>
+                                <td>@x.MobileNo</td>
+                                <td>@x.Address</td>
+                                <td>@x.TotalItems</td>
+                                <td>
+                                    <button class="btn btn-success btn-sm btnOrderDetails" data-key="@x.ProductOrderMasterId">View</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).on('click', '.btnOrderDetails', function () {
+            var id = $(this).data('key');
+            window.location.href = '@Url.Action("ViewItems", "Order")' + '?id=' + id;
+        })
+    </script>
+}

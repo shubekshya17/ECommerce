@@ -88,7 +88,37 @@ namespace ECommerce.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var datas = _context.ProductOrderMaster
+                .GroupJoin(_context.ProductOrderDetail,
+                master => master.ProductOrderMasterId,
+                detail => detail.ProductOrderMasterId,
+                (master, detail) => new OrderWithCountVM
+                {
+                    ProductOrderMasterId = master.ProductOrderMasterId,
+                    FullName = master.FullName,
+                    Address = master.Address,
+                    MobileNo = master.MobileNo,
+                    TotalItems = detail.Count()
+                }).ToList();
+            return View(datas);
+        }
+
+        public IActionResult ViewItems(int Id)
+        {
+            var datas = _context.ProductOrderDetail
+                .Where(x => x.ProductOrderMasterId == Id)
+                .Join(_context.ProductItems,
+                master => master.ProductItemId,
+                detail => detail.ProductItemId,
+                (master,detail)=>new OrderWithNameVM
+                {
+                    Quantity = master.Quantity,
+                    UnitPrice = master.UnitPrice,
+                    ProductName = detail.ProductName,
+                    TotalPrice = master.Quantity * master.UnitPrice
+                })
+                .ToList();
+            return View(datas);
         }
     }
 }
