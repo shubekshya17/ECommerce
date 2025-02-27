@@ -115,15 +115,14 @@ namespace ECommerce.Controllers
                  });
             return View(datas);
         }
-
-        public IActionResult ViewItems(int Id)
+        public JsonResult ViewItems(int Id)
         {
             var datas = _context.ProductOrderDetail
                 .Where(x => x.ProductOrderMasterId == Id)
                 .Join(_context.ProductItems,
                 master => master.ProductItemId,
                 detail => detail.ProductItemId,
-                (master,detail)=>new OrderWithNameVM
+                (master, detail) => new OrderWithNameVM
                 {
                     Quantity = master.Quantity,
                     UnitPrice = master.UnitPrice,
@@ -131,7 +130,11 @@ namespace ECommerce.Controllers
                     TotalPrice = master.Quantity * master.UnitPrice
                 })
                 .ToList();
-            return View(datas);
+            return Json(new
+            {
+                success = true,
+                data = datas
+            });
         }
     }
 }

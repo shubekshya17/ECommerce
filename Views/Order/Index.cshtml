@@ -37,11 +37,63 @@
     </div>
 </div>
 
+<div class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Product Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemDetails">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
     <script>
         $(document).on('click', '.btnOrderDetails', function () {
+            debugger
+            var html = ''
             var id = $(this).data('key');
-            window.location.href = '@Url.Action("ViewItems", "Order")' + '?id=' + id;
+            $(".modal").modal("show");
+            $.ajax({
+                method: 'get',
+                url: '@Url.Action("ViewItems","Order")?id=' + id,
+                contentType: "application/json;charset=utf-8",
+                success: function (res) {
+                    $("#itemDetails").find("tr").remove();
+                    $.each(res.data, function (key, item) {
+                        html += "<tr>" +
+                            "<td>" + item.productName + "</td>" +
+                            "<td>" + item.unitPrice + "</td>" +
+                            "<td>" + item.quantity + "</td>" +
+                            "<td>" + item.totalPrice + "</td>" +
+                            "<td>" +
+                            "</tr>";
+                    })
+                    $("#itemDetails").append(html)
+                }
+            })
         })
     </script>
 }
