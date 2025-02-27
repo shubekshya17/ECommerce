@@ -17,6 +17,12 @@
                     </thead>
                     <tbody id="listDatas">
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" style="text-align:right;font-weight:500;">Grand Total:</td>
+                            <td colspan="1" class="grandTotalVal" style="color:green;font-weight:500"></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -76,10 +82,11 @@
 </div>
 
 @section scripts {
+    <script src="~/js/ecom.js"></script>
     <script>
         $(document).ready(function () {
             loadItems();
+            grandTotalCal();
         })
     </script>
-    <script src="~/js/ecom.js"></script>
 }

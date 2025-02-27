@@ -63,6 +63,7 @@ namespace ECommerce.Controllers
                 m.Address = orderVM.master.Address;
                 m.MobileNo = orderVM.master.MobileNo;
                 m.OrderDate = DateTime.Now;
+                m.GrandTotal = orderVM.detail.Sum(s => s.UnitPrice * s.Quantity);
                 _context.ProductOrderMaster.Add(m);
                 _context.SaveChanges();
 
@@ -88,6 +89,7 @@ namespace ECommerce.Controllers
         }
         public IActionResult Index()
         {
+            /*USING JOIN
             var datas = _context.ProductOrderMaster
                 .GroupJoin(_context.ProductOrderDetail,
                 master => master.ProductOrderMasterId,
@@ -99,7 +101,18 @@ namespace ECommerce.Controllers
                     Address = master.Address,
                     MobileNo = master.MobileNo,
                     TotalItems = detail.Count()
-                }).ToList();
+                }).ToList();*/
+           /* USING SELECT*/
+            var datas = _context.ProductOrderMaster
+                 .Select(s => new OrderWithCountVM
+                 {
+                    ProductOrderMasterId = s.ProductOrderMasterId,
+                    FullName = s.FullName,
+                    Address = s.Address,
+                    MobileNo = s.MobileNo,
+                    GrandTotal = s.GrandTotal,
+                    TotalItems = _context.ProductOrderDetail.Where(x => x.ProductOrderMasterId == s.ProductOrderMasterId).Count(),
+                 });
             return View(datas);
         }
 

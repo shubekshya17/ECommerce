@@ -16,6 +16,15 @@
     localStorage.setItem("Products", JSON.stringify(oldItems));
     toastr.success("Item Added In The Cart");
 })
+function grandTotalCal() {
+    var total = 0;
+    var products = localStorage.getItem("Products");
+    var products = JSON.parse(products);
+    $.each(products, function (key, item) {
+        total += item.UnitPrice * item.Quantity;
+    })
+    $(".grandTotalVal").text(total);
+}
 function loadItems() {
     var html = ''
     var products = localStorage.getItem("Products");
@@ -49,6 +58,7 @@ $(document).on('click', '.btnRemoveProducts', function () {
         if (result.isConfirmed) {
             localStorage.removeItem("Products");
             loadItems();
+            grandTotalCal();
             toastr.success("Products Removed Successfully");
         }
     });
@@ -68,10 +78,12 @@ $(document).on('click', '.btnDelete', function () {
             oldProducts = oldProducts.filter(x => x.ProductItemId != id)
             localStorage.setItem("Products", JSON.stringify(oldProducts));
             loadItems();
+            grandTotalCal();
         }
     });
 })
 $(document).on('change', '.txtQuantity', function () {
+    debugger;
     var id = $(this).data('key');
     var newQuantity = $(this).val();
     var oldProducts = JSON.parse(localStorage.getItem("Products") || '[]');
@@ -85,6 +97,7 @@ $(document).on('change', '.txtQuantity', function () {
     selectedItem.Total = +newQuantity * +selectedItem.UnitPrice;
     localStorage.setItem("Products", JSON.stringify(oldProducts));
     loadItems();
+    grandTotalCal();
 })
 
 $(document).on('click', '.btnCheckout', function () {
@@ -92,7 +105,6 @@ $(document).on('click', '.btnCheckout', function () {
 })
 
 $(document).on('click', '.modalSave', function () {
-    debugger
     var masterValue = {
         FullName: $(".txtFullName").val() || '',
         MobileNo: $(".txtMobileNo").val() || '',
@@ -144,4 +156,5 @@ function clearModalForm() {
    $(".txtAddress").val(''),
    $(".txtEmail").val(''),
    $(".modal").modal("hide")
+    grandTotalCal();
 }

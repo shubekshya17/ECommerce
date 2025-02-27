@@ -7,5 +7,6 @@
         public string MobileNo { get; set; }
         public string Address { get; set; }
         public int TotalItems { get; set; }
+        public decimal GrandTotal { get; set; }
     }
 }
