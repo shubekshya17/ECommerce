@@ -1,0 +1,137 @@
+﻿@model ECommerce.Models.ViewModels.PayVM
+<div class="row">
+    <div class="col d-flex justify-content-end">
+        <button type="button" class="btn btn-success btnKhalti">Pay With Khalti</button>
+    </div>
+</div>
+<div class="card mt-2">
+    <div class="card-body">
+    <h5>Your Details:</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.master.FullName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.master.FullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.master.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.master.Address)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.master.MobileNo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.master.MobileNo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.master.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.master.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.master.GrandTotal)
+        </dt>
+        <dd class="col-sm-10 grandTotalCal">
+            @Html.DisplayFor(model => model.master.GrandTotal)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.master.OrderDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.master.OrderDate)
+        </dd>
+    </dl>
+    </div>
+</div>
+<div class="card mt-2">
+    <div class="card-body">
+        <h5>Your Order Details:</h5>
+        <hr />
+       <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Product Item</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+                @foreach(var x in Model.detail)
+                {
+                    <tr>
+                        <td>@x.ProductName</td>
+                        <td>@x.UnitPrice</td>
+                        <td>@x.Quantity</td>
+                        <td>@x.TotalPrice</td>
+                    </tr>
+                }
+        </tbody>
+       </table>
+    </div>
+</div>
+@section scripts{
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            title: "<strong>Your Order Has Been Placed Successfully!</strong>",
+            icon: "success",
+            html: `
+            We will soon deliver
+            your order!
+          `,
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: `
+            <i class="fa fa-thumbs-up"></i> Great!
+          `,
+            confirmButtonAriaLabel: "Thumbs up, great!",
+            cancelButtonText: `
+            <i class="fa fa-thumbs-down"></i>
+          `,
+            cancelButtonAriaLabel: "Thumbs down"
+        });
+    </script>
+    <script src="~/js/ecom.js?v=2"></script>
+    <script>
+        $(document).ready(function () {
+            loadItems();
+            grandTotalCal();
+        })
+        $(document).on('click', '.btnKhalti', function () {
+            var ok = confirm("Are you sure you want to make payment?");
+            if (ok) {
+                debugger;
+                var payload = {
+                    Amount: +$(".grandTotalCal").html(),
+                    RedirectUrl: 'http://localhost:5014'
+                }
+                $.ajax({
+                    method: 'post',
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(payload),
+                    url: '@Url.Action("KhaltiPayment", "OnlinePayment")',
+                    success: function (res) {
+                        if (res.success) {
+                            var khalti = JSON.parse(res.data);
+                            window.location.href = khalti.payment_url
+                        }
+                        else {
+                            alert(res.message);
+                        }
+                    },
+                    error: function (res) {
+                        debugger;
+                    }
+                })
+            }
+        })
+    </script>
+}

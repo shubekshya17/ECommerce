@@ -83,7 +83,8 @@ namespace ECommerce.Controllers
                 return Json(new
                 {
                     success = true,
-                    message = "Order Placed Successfully"
+                    message = "Order Placed Successfully",
+                    PK = m.ProductOrderMasterId
                 });
             }
         }

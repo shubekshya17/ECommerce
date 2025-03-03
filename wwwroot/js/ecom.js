@@ -137,14 +137,16 @@ $(document).on('click', '.modalSave', function () {
             contentType: "application/json;charset=utf-8",
             success: function (res) {
                 if (res.success) {
+                    debugger;
                     toastr.success(res.message);
+                    localStorage.removeItem("Products");
+                    loadItems();
+                    clearModalForm();
+                    window.location.href = "/ProductItem/Pay?id="+res.pk
                 }
                 else {
                     toastr.error(res.message);
                 }
-                localStorage.removeItem("Products");
-                loadItems();
-                clearModalForm();
             }
         })
     }
