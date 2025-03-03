@@ -74,6 +74,7 @@
               </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-success btnKhalti" data-bs-dismiss="modal">Pay With Khalti</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary modalSave">Save</button>
             </div>
@@ -87,6 +88,34 @@
         $(document).ready(function () {
             loadItems();
             grandTotalCal();
+        })
+        $(document).on('click','.btnKhalti',function(){
+            var ok = confirm("Are you sure you want to make payment?");
+            if (ok) {
+                debugger;
+                var payload = {
+                    Amount : +$(".grandTotalVal").html(),
+                    RedirectUrl : 'http://localhost:5014'
+                }
+                $.ajax({
+                    method: 'post',
+                    contentType: "application/json;charset=utf-8",
+                    data:JSON.stringify(payload),
+                    url: '@Url.Action("KhaltiPayment", "OnlinePayment")',
+                    success: function (res) {
+                        if (res.success) {
+                            var khalti = JSON.parse(res.data);
+                            window.location.href = khalti.payment_url
+                        }
+                        else {
+                            alert(res.message);
+                        }
+                    },
+                    error: function (res) {
+                        debugger;
+                    }
+                })
+            }
         })
     </script>
 }
