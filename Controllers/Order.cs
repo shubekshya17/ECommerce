@@ -64,6 +64,8 @@ namespace ECommerce.Controllers
                 m.MobileNo = orderVM.master.MobileNo;
                 m.OrderDate = DateTime.Now;
                 m.GrandTotal = orderVM.detail.Sum(s => s.UnitPrice * s.Quantity);
+                m.RefNo = string.Empty;
+                m.PaymentOperator = string.Empty;
                 _context.ProductOrderMaster.Add(m);
                 _context.SaveChanges();
 

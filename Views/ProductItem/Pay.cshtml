@@ -1,14 +1,23 @@
 ﻿@model ECommerce.Models.ViewModels.PayVM
 <div class="row">
-    <div class="col d-flex justify-content-end">
-        <button type="button" class="btn btn-success btnKhalti">Pay With Khalti</button>
-    </div>
+    @if (string.IsNullOrEmpty(Model.master.RefNo))
+    {
+        <div class="col d-flex justify-content-end">
+            <button type="button" class="btn btn-success btnKhalti">Pay With Khalti</button>
+        </div>
+    }
+    else
+    {
+        <label><strong>Payment Already Done:</strong> @Model.master.RefNo</label>
+    }
+
 </div>
 <div class="card mt-2">
     <div class="card-body">
     <h5>Your Details:</h5>
     <hr />
     <dl class="row">
+        <input type="hidden" value="@Model.master.ProductOrderMasterId" class="hdnMasterId"/>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.master.FullName)
         </dt>
@@ -111,7 +120,8 @@
                 debugger;
                 var payload = {
                     Amount: +$(".grandTotalCal").html(),
-                    RedirectUrl: 'http://localhost:5014'
+                    RedirectUrl: 'http://localhost:5014',
+                    ProductOrderMasterId: $(".hdnMasterId").val()
                 }
                 $.ajax({
                     method: 'post',

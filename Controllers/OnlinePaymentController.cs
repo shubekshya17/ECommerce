@@ -1,4 +1,5 @@
-﻿using ECommerce.Models.ViewModels;
+﻿using ECommerce.DataAccess;
+using ECommerce.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
@@ -8,9 +9,18 @@ namespace ECommerce.Controllers
 {
     public class OnlinePaymentController : Controller
     {
-        [HttpGet]
-        public ActionResult Success(string pidx, string transaction_id, string tidx, int amount)
+        ApplicationDbContext _context;
+        public OnlinePaymentController(ApplicationDbContext context)
         {
+            _context = context;
+        }
+        [HttpGet]
+        public ActionResult Success(string pidx, string transaction_id, string tidx, int amount,int info)
+        {
+            var oldData = _context.ProductOrderMaster.Where(x => x.ProductOrderMasterId == info).FirstOrDefault();
+            oldData.RefNo = tidx;
+            oldData.PaymentOperator = "Khalti";
+            _context.SaveChanges();
             return View();
         }
 
@@ -27,11 +37,7 @@ namespace ECommerce.Controllers
                 amount = khaltiPaymentVM.Amount * 100,
                 purchase_order_id = Guid.NewGuid().ToString(),
                 purchase_order_name = Guid.NewGuid().ToString(),
-                merchant_info = new
-                {
-                    name = "Test",
-                    email = "test@gmail.com"
-                },
+                merchant_info = khaltiPaymentVM.ProductOrderMasterId,
                 customer_info = new
                 {
                     name = "Himalaya Ecommerce",
