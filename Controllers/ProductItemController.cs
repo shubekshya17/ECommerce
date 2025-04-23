@@ -2,6 +2,7 @@
 using ECommerce.Models;
 using ECommerce.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ECommerce.Controllers
 {
@@ -15,6 +16,12 @@ namespace ECommerce.Controllers
         public IActionResult Index()
         {
             var datas = _context.ProductItems.ToList();
+            var category = _context.Category.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.CategoryName
+            }).ToList();
+            ViewBag.CategoryName = new SelectList(category, "Value", "Text");
             return View(datas);
         }
         public JsonResult Save(string name, string code, int categoryId, string description, int unitPrice, string thumbnail, int id)

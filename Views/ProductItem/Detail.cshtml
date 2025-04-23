@@ -1,7 +1,13 @@
 ﻿@model ECommerce.Models.ProductItem
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <div>
     <h4>Product</h4>
     <hr />
+    <div style="display:flex;flex-direction:row">
+    <div>
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProductName)
@@ -28,16 +34,32 @@
             @Html.DisplayFor(model => model.CategoryId)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Thumbnail)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Thumbnail)
-        </dd>
-        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UnitPrice)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UnitPrice)
         </dd>
     </dl>
+            <div style="margin-top: 10px;">
+                <span style="font-weight: 600;">Was this information helpful?</span>
+                <span style="margin-left: 10px; cursor: pointer; color: green;">
+                    <i class="fa fa-thumbs-up"></i>
+                </span>
+                <span style="margin-left: 10px; cursor: pointer; color: red;">
+                    <i class="fa fa-thumbs-down"></i>
+                </span>
+            </div>
+    </div>
+    <div>
+        <img src="@Model.Thumbnail" style="width:80%;height:100%"/>
+    </div>
+    </div>
 </div>
+<script>
+    $(document).on('click', '.fa-thumbs-down', function () {
+        toastr.info("We're sorry to hear that. We'll try to improve!");
+    });
+    $(document).on('click', '.fa-thumbs-up', function () {
+        toastr.success("Your feedback is appreciated! Thanks for the support!");
+    });
+</script>

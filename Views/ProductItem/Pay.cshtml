@@ -115,9 +115,8 @@
             grandTotalCal();
         })
         $(document).on('click', '.btnKhalti', function () {
-            var ok = confirm("Are you sure you want to make payment?");
+            /*var ok = confirm("Are you sure you want to make payment?");
             if (ok) {
-                debugger;
                 var payload = {
                     Amount: +$(".grandTotalCal").html(),
                     RedirectUrl: 'http://localhost:5014',
@@ -141,7 +140,40 @@
                         debugger;
                     }
                 })
-            }
+            }*/
+            Swal.fire({
+                title: "Are you sure you want to make payment?",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, proceed!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var payload = {
+                        Amount: +$(".grandTotalCal").html(),
+                        RedirectUrl: 'http://localhost:5014',
+                        ProductOrderMasterId: $(".hdnMasterId").val()
+                    }
+                    $.ajax({
+                        method: 'post',
+                        contentType: "application/json;charset=utf-8",
+                        data: JSON.stringify(payload),
+                        url: '@Url.Action("KhaltiPayment", "OnlinePayment")',
+                        success: function (res) {
+                            if (res.success) {
+                                var khalti = JSON.parse(res.data);
+                                window.location.href = khalti.payment_url
+                            }
+                            else {
+                                alert(res.message);
+                            }
+                        },
+                        error: function (res) {
+                            debugger;
+                        }
+                    })
+                }
+            });
         })
     </script>
 }

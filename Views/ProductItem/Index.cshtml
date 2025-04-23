@@ -1,15 +1,40 @@
-﻿@model IEnumerable<ECommerce.Models.ProductItem>
-<div class="row">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-hover">
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model IEnumerable<ECommerce.Models.ProductItem>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+<style>
+    .bodybtn{
+        font-size:12px;
+        padding:8px 18px;
+        font-weight:600;
+        margin-bottom:0px;
+    }
+    td{
+        font-size:14px;
+        font-weight:600;
+    }
+    th{
+        font-size:15px;
+        font-weight:650;
+    }
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.3rem;
+    }
+</style>
+ <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                <table id="dtTable" class="table-class-hover dtTable">
                     <thead>
-                        <tr>
+                       <tr>
                         <th>Product Name</th>
                         <th>Product Code</th>
-                        <th>Category Id</th>
-                        <th>Description</th>
+                        <th>Category</th>
                         <th>Action</th>
                         </tr>
                     </thead>
@@ -20,88 +45,68 @@
                                 <td>@x.ProductName</td>
                                 <td>@x.ProductCode</td>
                                 <td>@x.CategoryId</td>
-                                <td>@x.Description</td>
                                 <td>
-                                    <button data-key="@x.ProductItemId" class="btn btn-primary btn-sm btnEdit">Edit</button>
-                                    <button data-key="@x.ProductItemId" class="btn btn-danger btn-sm btnDelete">Delete</button>
+                                    <button data-key="@x.ProductItemId" class="btn btn-dark btn-sm btnEdit bodybtn">Edit</button>
+                                    <button data-key="@x.ProductItemId" class="btn btn-danger btn-sm btnDelete bodybtn">Delete</button>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-5">
-                        Product Name
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Product Name</label>
+                        <input type="text" class="form-control txtProductName">
                     </div>
-                    <div class="col-md-7">
-                        <input type="text" class="form-control txtProductName"/>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">Product Code</label>
+                        <input type="text" class="form-control txtProductCode">
                     </div>
-                </div>
-                <div class="row col mt-2">
-                    <div class="col-md-5">
-                        Product Code
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">Category</label>
+                         @Html.DropDownList("Id", (SelectList)ViewBag.CategoryName, "Select Category", new { @class = "form-control txtCategoryId"})
                     </div>
-                    <div class="col-md-7">
-                        <input type="text" class="form-control txtProductCode" />
+                     <div class="form-group">
+                        <label for="formGroupExampleInput2">Description</label>
+                        <input type="text" class="form-control txtDescription">
                     </div>
-                </div>
-                <div class="row col mt-2">
-                    <div class="col-md-5">
-                        Category Id
+                     <div class="form-group">
+                        <label for="formGroupExampleInput2">Unit Price</label>
+                        <input type="text" class="form-control txtUnitPrice">
                     </div>
-                    <div class="col-md-7">
-                        <input type="text" class="form-control txtCategoryId" />
+                     <div class="form-group">
+                        <label for="formGroupExampleInput2">Thumbnail</label>
+                        <input type="text" class="form-control txtThumbnail">
                     </div>
-                </div>
-                <div class="row col mt-2">
-                    <div class="col-md-5">
-                        Description
-                    </div>
-                    <div class="col-md-7">
-                        <input type="text" class="form-control txtDescription" />
-                    </div>
-                </div>
-                <div class="row col mt-2">
-                    <div class="col-md-5">
-                        Unit Price
-                    </div>
-                    <div class="col-md-7">
-                        <input type="number" class="form-control txtUnitPrice" />
-                    </div>
-                </div>
-                <div class="row col mt-2">
-                    <div class="col-md-5">
-                        Thumbnail
-                    </div>
-                    <div class="col-md-7">
-                        <input type="text" class="form-control txtThumbnail" />
-                    </div>
-                </div>
-                <div class="row col mt-2">
-                    <div class="col-md-5">
-                    </div>
-                    <div class="col-md-7">
+                    <div class="btn-container">
                         <input type="hidden" class="hdnId"/>
-                        <button type="button" class="btn btn-success btn-sm btnSave">Save</button>
-                        <button type="button" class="btn btn-danger btn-sm btnReset">Reset</button>
+                        <button type="button" class="btn btn-primary btn-sm btnSave bodybtn">Save</button>
+                        <button type="button" class="btn btn-danger btn-sm btnReset bodybtn">Reset</button>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @section scripts{
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script>
+         $(document).ready(function () {
+            $('#dtTable').DataTable();
+        });
+        function reloadData() {
+            window.location.reload();
+        }
         $(document).on('click', '.btnSave', function () {
             var id = $('.hdnId').val() || 0;
             var name = $('.txtProductName').val();
@@ -136,6 +141,7 @@
                     success: function (res) {
                         toastr.success(res.message);
                         clearForm();
+                        reloadData();
                     }
                 })
             }
@@ -188,6 +194,7 @@
                         contentType: "application/json;charset=utf-8",
                         success: function (res) {
                             toastr.success(res.message);
+                            reloadData();
                         }
                     })
                 }

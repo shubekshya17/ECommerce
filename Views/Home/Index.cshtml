@@ -1,19 +1,47 @@
 ﻿@model ECommerce.Models.ViewModels.DashboardVM
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+<style>
+    .owl-carousel{
+        margin-top:8px;
+        margin-bottom:8px;
+    }
+    .miniCards{
+        display:flex;
+        flex-direction:row;
+        gap:1rem;
+        margin-top:8px;
+    }
+    .btn-link-style {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 0.95rem;
+    }
+        .btn-link-style:hover {
+            color: #0056b3;
+            text-decoration: none;
+        }
+</style>
 <div class="row">
     <div class="col-md-3">
-        <div style="max-height: 308px; overflow-y: auto; border: 0.5px solid #ddd; border-radius:0.5rem">
-            <table class="table table-bordered">
+        <div style="max-height: 380px; overflow-y: auto; border: 0.5px solid #ddd;">
+            <table class="table">
                 <thead>
                     <tr>
-                        <th>Product Category</th>
+                        <th style="background-color: #f8f9fa;">Product Category</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var x in Model.CategoryInfo)
                     {
                         <tr>
-                            <td>
-                                <a href="/Category/Category?id=@x.Id&categoryName=@x.CategoryName">
+                            <td style="background-color: #f8f9fa">
+                                <a href="/Category/Category?id=@x.Id&categoryName=@x.CategoryName" style="text-decoration: none; color: inherit; font-weight:600;">
                                     @x.CategoryName
                                 </a>
                             </td>
@@ -22,6 +50,12 @@
                 </tbody>
             </table>
         </div>
+        <video autoplay muted loop width="160px">
+            <source src="~/videos/happy%20buyer.mp4" type="video/mp4"/>
+            </video>
+            @* <video width="300" height="400" controls autoplay muted loop>
+                <source src="~/videos/woman%20pushing%20shopping%20trolley.mp4" type="video/mp4" />
+            </video> *@
     </div>
     <div class="col-md-9">
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -32,13 +66,13 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="https://img.freepik.com/premium-vector/modern-trendy-black-friday-super-sale-facebook-cover-editable-web-banner-template_615614-684.jpg?w=826" class="d-block w-100" alt="..." style="width: 831px; height: 308px">
+                    <img src="https://img.freepik.com/free-psd/sales-landing-page-template_23-2149397223.jpg?t=st=1745398260~exp=1745401860~hmac=4c4c75bc5b146d2a5d6a5a5ef09563d7c46f2910b71a4a690b77c0582501e7c0&w=1380" class="d-block w-100" alt="..." style="width: 800px; height: 380px">
                 </div>
                 <div class="carousel-item">
-                    <img src="https://img.freepik.com/premium-vector/modern-trendy-black-friday-super-sale-facebook-cover-editable-web-banner-template_615614-693.jpg?w=826" class="d-block w-100" alt="..." style="width: 831px; height: 308px">
+                    <img src="https://img.freepik.com/premium-photo/directly-shot-headphones-table_1048944-25360244.jpg?w=996" class="d-block w-100" alt="..." style="width: 800px; height: 380px">
                 </div>
                 <div class="carousel-item">
-                    <img src="https://img.freepik.com/free-psd/black-friday-big-sale-social-media-post-design-template_47987-25239.jpg?t=st=1740041570~exp=1740045170~hmac=829f0cf1785d4a7ced1957563062eaeed1dcb3e72d8b4e9057135873450572cb&w=826" class="d-block w-100" alt="...">
+                    <img src="https://img.freepik.com/free-psd/world-chocolate-day-landing-page-template_23-2150425952.jpg?t=st=1745398950~exp=1745402550~hmac=c2e40e3dd17e8df0b62ae6831e9255c154b2b582181668be3c0afb3d21d35fca&w=1380" class="d-block w-100" alt="..." style="width: 800px; height: 380px">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -51,22 +85,54 @@
             </button>
         </div>
     </div>
+    <div class="owl-carousel owl-theme">
+        <div class="item">
+            <img src="https://img.freepik.com/premium-photo/close-up-wristwatch-table_1048944-28747234.jpg?w=996" style="width: 100%; height: 150px; object-fit: cover;" />
+        </div>
+        <div class="item">
+            <img src="https://img.freepik.com/free-photo/modern-photorealistic-lamp-design_23-2151038960.jpg?t=st=1745401407~exp=1745405007~hmac=7abf7710d965dfaa6c43b536f867c560ba6168cfd8137d1e663962171a65ce2e&w=1380" style="width: 100%; height: 150px; object-fit: cover;" />
+        </div>
+        <div class="item">
+            <img src="https://img.freepik.com/free-photo/top-view-sustainably-produced-alcoholic-beverage_23-2150162932.jpg?t=st=1745401469~exp=1745405069~hmac=30bb3bd8901c665f194aba5f0a605cdc4097cfdcd8b2073b777b2a4a5708c3f5&w=900" style="width: 100%; height: 150px; object-fit: cover;" />
+        </div>
+        <div class="item">
+            <img src="https://img.freepik.com/free-photo/flower-vase_74190-108.jpg?t=st=1745417814~exp=1745421414~hmac=bc439f11dfbbbdceaf670f8f68651b6ba5e07510db07cb39788bf2da783bad3f&w=996" style="width: 100%; height: 150px; object-fit: cover;" />
+        </div>
+    </div>
 </div>
+
 @foreach (var category in Model.CategoryInfo)
 {
-    <div class="row mt-2">
-        <h4>@category.CategoryName</h4>
+    <div class="row mt-3 mb-3">
+        <h4 style="text-align:center;margin-bottom:20px" data-aos="fade-up" data-aos-delay="300" data-aos-duration="800">@category.CategoryName</h4>
         @foreach (var product in Model.ProductItemInfo.Where(x => x.CategoryId == category.Id).ToList())
         {
-            <div class="col-md-3">
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="300" data-aos-duration="800">
                 <div class="card">
-                    <div class="card-body">
-                        <img src="https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/16-9640/media-gallery/silver/touch/notebook-laptop-xps-16-9640-t-silver-gallery-4.psd?fmt=png-alpha&pscan=auto&scl=1&hei=804&wid=1324&qlt=100,1&resMode=sharp2&size=1324,804&chrss=full" style="width: 200px; height: 150px" ; />
-                        <label>@product.ProductName</label>
+                    <div class="card-body p-0">
+                        <img src="@product.Thumbnail" style="width: 100%; height: 350px; object-fit: cover;" />
                     </div>
-                    <div class="card-footer">
-                        <button class="btn btn-secondary btn-sm btnCart" data-key="@product.ProductItemId" data-name="@product.ProductName" data-price="@product.UnitPrice"><i class="fa fa-shopping-cart"></i>Cart</button>
-                        <button class="btn btn-success btn-sm btnView" data-key="@product.ProductItemId" style="float:right;"><i class="fa fa-eye"></i>View</button>
+                    <div class="card-footer" style="display:flex;flex-direction:row;justify-content:space-between">
+                        <div>
+                        <label style="font-weight:600">@product.ProductName</label>
+                        </div>
+                       @*  <div>
+                        <button class="btn btn-secondary btn-sm btnCart" data-key="@product.ProductItemId" data-name="@product.ProductName" data-price="@product.UnitPrice"><i class="fa fa-shopping-cart"></i></button>
+                        <button class="btn btn-success btn-sm btnView" data-key="@product.ProductItemId" style="float:right;"><i class="fa fa-eye"></i></button>
+                        </div> *@
+                        <div class="button-group" style="display:flex; gap:5px;">
+                            <button class="btn-link-style btnView"
+                                    data-key="@product.ProductItemId">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                            |
+                            <button class="btn-link-style btnCart"
+                                    data-key="@product.ProductItemId"
+                                    data-name="@product.ProductName"
+                                    data-price="@product.UnitPrice">
+                                <i class="fa fa-shopping-cart"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,10 +141,39 @@
 }
 
 @section scripts {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
     <script>
         $(document).on('click', '.btnView', function () {
             var id = $(this).data('key');
             window.location.href = '@Url.Action("Detail", "ProductItem")' + '?id=' + id;
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.owl-carousel').owlCarousel({
+                loop: true,
+                margin: 10,
+                autoplay: true,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 2
+                    },
+                    1000: {
+                        items: 4
+                    }
+                }
+            });
         });
     </script>
     <script src="~/js/ecom.js"></script>

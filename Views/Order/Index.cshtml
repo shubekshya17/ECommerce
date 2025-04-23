@@ -1,9 +1,41 @@
-﻿@model IEnumerable<ECommerce.Models.ViewModels.OrderWithCountVM>
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model IEnumerable<ECommerce.Models.ViewModels.OrderWithCountVM>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+<style>
+    .bodybtn{
+        font-size:12px;
+        padding:8px 18px;
+        font-weight:600;
+        margin-bottom:0px;
+    }
+    td{
+        font-size:14px;
+        font-weight:600;
+    }
+    th{
+        font-size:15px;
+        font-weight:650;
+    }
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.3rem;
+    }
+    .modal-header {
+        background-color:#2F466E;
+    }
+    .modal-title {
+        color:#FFFFFF;
+    }
+</style>
 <div class="row">
-    <div class="col-md-9">
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-hover">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                <table id="dtTable" class="table-class-hover dtTable">
                     <thead>
                         <tr>
                             <th>SN</th>
@@ -16,7 +48,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var x in Model)
+                       @foreach (var x in Model)
                         {
                             <tr>
                                 <td>@x.ProductOrderMasterId</td>
@@ -26,28 +58,28 @@
                                 <td>@x.TotalItems</td>
                                 <td>@x.GrandTotal</td>
                                 <td>
-                                    <button class="btn btn-success btn-sm btnOrderDetails" data-key="@x.ProductOrderMasterId">View</button>
+                                    <button class="btn btn-dark btn-sm btnOrderDetails bodybtn" data-key="@x.ProductOrderMasterId">View</button>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <div class="modal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Product Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close bodybtn" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="card">
                     <div class="card-body">
-                        <table class="table table-hover">
+                        <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Product Name</th>
@@ -70,7 +102,11 @@
 </div>
 
 @section scripts{
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script>
+         $(document).ready(function () {
+            $('#dtTable').DataTable();
+        });
         $(document).on('click', '.btnOrderDetails', function () {
             debugger
             var html = ''
@@ -88,7 +124,6 @@
                             "<td>" + item.unitPrice + "</td>" +
                             "<td>" + item.quantity + "</td>" +
                             "<td>" + item.totalPrice + "</td>" +
-                            "<td>" +
                             "</tr>";
                     })
                     $("#itemDetails").append(html)

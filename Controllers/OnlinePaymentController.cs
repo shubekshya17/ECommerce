@@ -15,9 +15,9 @@ namespace ECommerce.Controllers
             _context = context;
         }
         [HttpGet]
-        public ActionResult Success(string pidx, string transaction_id, string tidx, int amount,int info)
+        public ActionResult Success(string pidx, string transaction_id, string tidx, int amount,int merchant_info)
         {
-            var oldData = _context.ProductOrderMaster.Where(x => x.ProductOrderMasterId == info).FirstOrDefault();
+            var oldData = _context.ProductOrderMaster.Where(x => x.ProductOrderMasterId == merchant_info).FirstOrDefault();
             oldData.RefNo = tidx;
             oldData.PaymentOperator = "Khalti";
             _context.SaveChanges();

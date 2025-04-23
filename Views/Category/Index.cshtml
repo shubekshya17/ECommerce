@@ -1,10 +1,36 @@
-﻿@model IEnumerable<ECommerce.Models.Category>
-<div class="row">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead>
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model IEnumerable<ECommerce.Models.Category>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+<style>
+    .bodybtn{
+        font-size:12px;
+        padding:8px 18px;
+        font-weight:600;
+        margin-bottom:0px;
+    }
+    td{
+        font-size:14px;
+        font-weight:600;
+    }
+    th{
+        font-size:15px;
+        font-weight:650;
+    }
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.3rem;
+    }
+</style>
+  <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                <table id="dtTable" class="table-class-hover dtTable">
+                     <thead>
                     <th>Name</th>
                     <th>Unit</th>
                     <th>Action</th>
@@ -12,51 +38,45 @@
                     <tbody id="listData">
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        Name
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Name</label>
+                        <input type="text" class="form-control formName">
                     </div>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control formName" />
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">Category Code</label>
+                        <input type="text" class="form-control formUnit">
                     </div>
-                </div>
-                <div class="row col mt-2">
-                    <div class="col-md-3">
-                        Code
+                    <div class="btn-container">
+                       <input type="hidden" class="hdnId" />
+                        <button type="button" class="btn btn-primary btn-sm btnSave bodybtn">Save</button>
+                        <button type="button" class="btn btn-danger btn-sm btnCancel bodybtn">Cancel</button>
                     </div>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control formUnit" />
-                    </div>
-                </div>
-                <div class="row col mt-2">
-                    <div class="col-md-3">
-                    </div>
-                    <div class="col-md-6">
-                        <input type="hidden" class="hdnId" />
-                        <button type="button" class="btn btn-success btn-sm btnSave">Save</button>
-                        <button type="button" class="btn btn-danger btn-sm btnCancel">Cancel</button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @section scripts {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            toastr.success("Welcome");  
             loadData();
+            $('#dtTable').DataTable();
         })
+        function reloadData() {
+            window.location.reload();
+        }
         function loadData() {
             var html = '';
             $.ajax({
@@ -70,8 +90,8 @@
                             "<td>" + item.categoryName + "</td>" +
                             "<td>" + item.categoryUnit + "</td>" +
                             "<td>" +
-                            "<button type='button' data-key='" + item.id + "' class='btn btn-primary btn-sm btnEdit'>Edit</button> " +
-                            "<button type='button' data-key='" + item.id + "' class='btn btn-danger btn-sm btnDelete'>Delete</button>" +
+                            "<button type='button' data-key='" + item.id + "' class='btn btn-dark btn-sm btnEdit bodybtn'>Edit</button> " +
+                            "<button type='button' data-key='" + item.id + "' class='btn btn-danger btn-sm btnDelete bodybtn'>Delete</button>" +
                             "</td>" +
                             "</tr>";
                     })
@@ -116,7 +136,6 @@
             });
         })
         $(document).on('click', '.btnDelete', function () {
-            debugger;
             var id = $(this).data('key');
             Swal.fire({
                 title: "Are you sure?",

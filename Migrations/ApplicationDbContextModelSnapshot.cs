@@ -153,6 +153,35 @@ namespace ECommerce.Migrations
                     b.ToTable("ProductOrderMaster");
                 });
 
+            modelBuilder.Entity("ECommerce.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            Password = "Pass123$",
+                            UserName = "ShubekshyaShrestha"
+                        });
+                });
+
             modelBuilder.Entity("ECommerce.Models.ProductOrderDetail", b =>
                 {
                     b.HasOne("ECommerce.Models.ProductItem", "ProductItem")
