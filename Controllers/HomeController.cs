@@ -40,5 +40,28 @@ namespace ECommerce.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public JsonResult GetChartData()
+        {
+            var result = _context.ProductOrderDetail.GroupBy(x => x.ProductItemId,
+                (key, g) => new
+                {
+                    ProductItemId = key,
+                    TotalCount = g.Count(),
+                });
+            var data = _context.ProductItems
+                .Select(s => new
+                {
+                    ProductItemId = s.ProductItemId,
+                    ProductItemName = s.ProductName,
+                })
+                .ToList();
+            return Json(new
+            {
+                Success = true,
+                CountInfo = result,
+                nameInfo = data
+            });
+        }
     }
 }
